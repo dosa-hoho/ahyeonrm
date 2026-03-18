@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>아현재활의학과의원 — 환자 설명자료</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --primary: #1B4F8A;
+    --primary-light: #EBF2FA;
+    --primary-mid: #4A7FB5;
+    --accent: #2E9E6B;
+    --accent-light: #E8F7F1;
+    --warn: #C0392B;
+    --warn-light: #FDECEB;
+    --amber: #B7770D;
+    --amber-light: #FEF6E4;
+    --text: #1A1A2E;
+    --text-sub: #5A6472;
+    --text-hint: #9BA4B0;
+    --bg: #F4F7FB;
+    --card: #FFFFFF;
+    --border: rgba(27,79,138,0.12);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overscroll-behavior: none;
+  }
+
+  /* ── 헤더 ── */
+  .clinic-header {
+    background: var(--primary);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(27,79,138,0.18);
+  }
+  .clinic-logo { display: flex; align-items: center; gap: 14px; }
+  .clinic-logo-icon {
+    width: 48px; height: 48px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+  }
+  .clinic-name { color: #fff; }
+  .clinic-name .main { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+  .clinic-name .sub { font-size: 12px; font-weight: 300; opacity: 0.75; margin-top: 2px; }
+  .clinic-time { color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 300; text-align: right; }
+  .clinic-time .time { font-size: 22px; font-weight: 500; color: #fff; }
+
+  /* ── 메인 레이아웃 ── */
+  .main { display: grid; grid-template-columns: 280px 1fr; min-height: calc(100vh - 88px); }
+
+  /* ── 사이드바 ── */
+  .sidebar {
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    padding: 24px 16px;
+    overflow-y: auto;
+  }
+  .sidebar-section { margin-bottom: 24px; }
+  .sidebar-label {
+    font-size: 11px; font-weight: 600; color: var(--text-hint);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 0 8px; margin-bottom: 8px;
+  }
+  .menu-btn {
+    width: 100%; display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px; border-radius: var(--radius-sm);
+    border: none; background: transparent;
+    color: var(--text-sub); font-size: 14px; font-weight: 500;
+    cursor: pointer; transition: all 0.18s; text-align: left;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .menu-btn:hover { background: var(--primary-light); color: var(--primary); }
+  .menu-btn.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
+  .menu-btn .icon { font-size: 18px; width: 28px; text-align: center; flex-shrink: 0; }
+  .menu-btn .arrow { margin-left: auto; font-size: 12px; opacity: 0.4; }
+
+  .generate-big-btn {
+    width: 100%; padding: 16px;
+    background: var(--primary); color: #fff;
+    border: none; border-radius: var(--radius-sm);
+    font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: all 0.18s;
+    font-family: 'Noto Sans KR', sans-serif;
+    margin-top: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .generate-big-btn:hover { background: #153d6e; transform: translateY(-1px); }
+  .generate-big-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* ── 콘텐츠 영역 ── */
+  .content { padding: 32px; overflow-y: auto; max-height: calc(100vh - 88px); }
+
+  /* ── 홈 화면 ── */
+  .home-welcome {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%);
+    border-radius: var(--radius); padding: 36px 40px;
+    color: #fff; margin-bottom: 28px;
+    position: relative; overflow: hidden;
+  }
+  .home-welcome::after {
+    content: '🏥';
+    position: absolute; right: 32px; top: 50%; transform: translateY(-50%);
+    font-size: 80px; opacity: 0.15;
+  }
+  .home-welcome h2 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+  .home-welcome p { font-size: 15px; opacity: 0.85; line-height: 1.6; }
+
+  .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+  .cat-card {
+    background: var(--card); border-radius: var(--radius);
+    padding: 22px 18px; cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: all 0.2s; text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .cat-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(27,79,138,0.12); }
+  .cat-card .cat-icon { font-size: 32px; margin-bottom: 10px; }
+  .cat-card .cat-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .cat-card .cat-count { font-size: 12px; color: var(--text-hint); }
+
+  /* ── 설정 패널 ── */
+  .setup-card {
+    background: var(--card); border-radius: var(--radius);
+    padding: 28px; margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .setup-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+  .field-label { font-size: 13px; font-weight: 500; color: var(--text-sub); margin-bottom: 8px; }
+  .big-select {
+    width: 100%; padding: 14px 16px;
+    border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    background: var(--bg); color: var(--text);
+    font-size: 15px; font-family: 'Noto Sans KR', sans-serif;
+    outline: none; cursor: pointer; margin-bottom: 18px;
+  }
+  .big-select:focus { border-color: var(--primary); }
+  .big-input {
+    width: 100%; padding: 14px 16px;
+    border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    background: var(--bg); color: var(--text);
+    font-size: 15px; font-family: 'Noto Sans KR', sans-serif;
+    outline: none; margin-bottom: 18px;
+  }
+  .big-input:focus { border-color: var(--primary); }
+
+  .tag-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .big-tag {
+    padding: 10px 18px; border-radius: 30px;
+    border: 1.5px solid var(--border);
+    background: var(--bg); color: var(--text-sub);
+    font-size: 14px; font-weight: 500;
+    cursor: pointer; transition: all 0.15s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .big-tag:hover { border-color: var(--primary); color: var(--primary); }
+  .big-tag.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary); font-weight: 600; }
+
+  .tone-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
+  .tone-btn {
+    padding: 12px 8px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    background: var(--bg); color: var(--text-sub);
+    font-size: 13px; font-weight: 500; text-align: center;
+    cursor: pointer; transition: all 0.15s;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .tone-btn.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary); font-weight: 600; }
+
+  /* ── 출력 결과 ── */
+  .output-card {
+    background: var(--card); border-radius: var(--radius);
+    padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .output-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .output-clinic { display: flex; align-items: center; gap: 10px; }
+  .output-clinic .badge { background: var(--primary); color: #fff; font-size: 12px; padding: 4px 12px; border-radius: 20px; font-weight: 500; }
+  .output-actions { display: flex; gap: 10px; }
+  .action-btn {
+    padding: 10px 20px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    background: transparent; color: var(--text-sub);
+    font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all 0.15s;
+    font-family: 'Noto Sans KR', sans-serif;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .action-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .action-btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .action-btn.primary:hover { background: #153d6e; }
+
+  .output-body { font-size: 15px; line-height: 1.85; color: var(--text); white-space: pre-wrap; }
+
+  /* ── 로딩 ── */
+  .loading-box { text-align: center; padding: 60px 20px; }
+  .loading-spinner { width: 48px; height: 48px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 14px; color: var(--text-sub); }
+
+  .empty-box { text-align: center; padding: 80px 20px; }
+  .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
+  .empty-text { font-size: 15px; color: var(--text-hint); }
+
+  /* ── 인쇄 ── */
+  @media print {
+    .clinic-header, .sidebar, .output-actions { display: none !important; }
+    .main { grid-template-columns: 1fr; }
+    .content { padding: 20px; max-height: none; }
+    .output-card { box-shadow: none; border: 1px solid #ddd; }
+  }
+
+  /* ── 반응형 ── */
+  @media (max-width: 768px) {
+    .main { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .category-grid { grid-template-columns: repeat(2, 1fr); }
+    .tone-grid { grid-template-columns: 1fr; }
+    .content { padding: 20px; }
+  }
+
+  .fade-in { animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<!-- 헤더 -->
+<header class="clinic-header">
+  <div class="clinic-logo">
+    <div class="clinic-logo-icon">🏥</div>
+    <div class="clinic-name">
+      <div class="main">아현재활의학과의원</div>
+      <div class="sub">환자 맞춤 설명자료 시스템</div>
+    </div>
+  </div>
+  <div class="clinic-time">
+    <div class="time" id="clock">--:--</div>
+    <div id="date-display"></div>
+  </div>
+</header>
+
+<div class="main">
+  <!-- 사이드바 -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">메뉴</div>
+      <button class="menu-btn active" onclick="showHome()">
+        <span class="icon">🏠</span> 홈
+        <span class="arrow">›</span>
+      </button>
+      <button class="menu-btn" onclick="showGenerator()">
+        <span class="icon">📋</span> 설명자료 만들기
+        <span class="arrow">›</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">빠른 생성</div>
+      <button class="menu-btn" onclick="quickGenerate('요추 추간판 탈출증 (허리디스크)')">
+        <span class="icon">🦴</span> 허리디스크
+      </button>
+      <button class="menu-btn" onclick="quickGenerate('요추 척추관 협착증')">
+        <span class="icon">🦴</span> 척추관 협착증
+      </button>
+      <button class="menu-btn" onclick="quickGenerate('무릎 골관절염')">
+        <span class="icon">🦵</span> 무릎 골관절염
+      </button>
+      <button class="menu-btn" onclick="quickGenerate('경막외 주사 시술')">
+        <span class="icon">💉</span> 경막외 주사
+      </button>
+      <button class="menu-btn" onclick="quickGenerate('오십견 (유착성 관절낭염)')">
+        <span class="icon">💪</span> 오십견
+      </button>
+      <button class="menu-btn" onclick="quickGenerate('족저근막염')">
+        <span class="icon">🦶</span> 족저근막염
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <button class="generate-big-btn" id="sidebar-gen-btn" onclick="runGenerate()" disabled>
+        ✨ 설명자료 생성
+      </button>
+    </div>
+  </aside>
+
+  <!-- 콘텐츠 -->
+  <main class="content" id="content-area">
+    <!-- 홈 화면 -->
+    <div id="home-view" class="fade-in">
+      <div class="home-welcome">
+        <h2>안녕하세요 😊</h2>
+        <p>아현재활의학과의원 환자 설명자료 시스템입니다.<br>아래에서 궁금한 질환을 선택하시면 쉽게 설명자료를 확인하실 수 있습니다.</p>
+      </div>
+
+      <div style="font-size:15px; font-weight:600; color:var(--text); margin-bottom:14px;">질환별 바로가기</div>
+      <div class="category-grid">
+        <div class="cat-card" onclick="quickGenerate('요추 추간판 탈출증 (허리디스크)')">
+          <div class="cat-icon">🦴</div>
+          <div class="cat-name">허리디스크</div>
+          <div class="cat-count">요추 추간판 탈출증</div>
+        </div>
+        <div class="cat-card" onclick="quickGenerate('요추 척추관 협착증')">
+          <div class="cat-icon">🏗️</div>
+          <div class="cat-name">척추관 협착증</div>
+          <div class="cat-count">요추 협착증</div>
+        </div>
+        <div class="cat-card" onclick="quickGenerate('경추 추간판 탈출증 (목디스크)')">
+          <div class="cat-icon">🔄</div>
+          <div class="cat-name">목디스크</div>
+          <div class="cat-count">경추 추간판 탈출증</div>
+        </div>
+        <div class="cat-card" onclick="quickGenerate('무릎 골관절염')">
+          <div class="cat-icon">🦵</div>
+          <div class="cat-name">무릎 관절염</div>
+          <div class="cat-count">골관절염</div>
+        </div>
+        <div class="cat-card" onclick="quickGenerate('오십견 (유착성 관절낭염)')">
+          <div class="cat-icon">💪</div>
+          <div class="cat-name">오십견</div>
+          <div class="cat-count">유착성 관절낭염</div>
+        </div>
+        <div class="cat-card" onclick="quickGenerate('족저근막염')">
+          <div class="cat-icon">🦶</div>
+          <div class="cat-name">족저근막염</div>
+          <div class="cat-count">발바닥 통증</div>
+        </div>
+        <div class="cat-card" onclick="quickGenerate('경막외 주사 시술')">
+          <div class="cat-icon">💉</div>
+          <div class="cat-name">경막외 주사</div>
+          <div class="cat-count">주사 시술 안내</div>
+        </div>
+        <div class="cat-card" onclick="quickGenerate('어깨 회전근개 파열')">
+          <div class="cat-icon">🙆</div>
+          <div class="cat-name">회전근개 파열</div>
+          <div class="cat-count">어깨 힘줄 손상</div>
+        </div>
+        <div class="cat-card" onclick="showGenerator()">
+          <div class="cat-icon">✏️</div>
+          <div class="cat-name">직접 입력</div>
+          <div class="cat-count">기타 질환</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 생성기 화면 -->
+    <div id="generator-view" style="display:none;" class="fade-in">
+      <div class="setup-card">
+        <div class="setup-title">📋 설명자료 설정</div>
+
+        <div class="field-label">진단명 / 시술명</div>
+        <select class="big-select" id="diag-select" onchange="updateBtn()">
+          <option value="">선택해주세요</option>
+          <optgroup label="척추">
+            <option>요추 추간판 탈출증 (허리디스크)</option>
+            <option>요추 척추관 협착증</option>
+            <option>경추 추간판 탈출증 (목디스크)</option>
+            <option>급성 요통</option>
+            <option>만성 요통</option>
+          </optgroup>
+          <optgroup label="관절">
+            <option>무릎 골관절염</option>
+            <option>어깨 회전근개 파열</option>
+            <option>오십견 (유착성 관절낭염)</option>
+            <option>족저근막염</option>
+            <option>테니스엘보 (외측상과염)</option>
+          </optgroup>
+          <optgroup label="주사 시술">
+            <option>경막외 주사 시술</option>
+            <option>후관절 주사 시술</option>
+            <option>무릎 관절강내 주사</option>
+            <option>PRP 주사</option>
+            <option>트리거포인트 주사</option>
+          </optgroup>
+        </select>
+
+        <div class="field-label">직접 입력 (위에 없는 경우)</div>
+        <input class="big-input" id="diag-custom" placeholder="예: 고관절 점액낭염, 손목건초염..." oninput="updateBtn()">
+
+        <div class="field-label">환자 연령대</div>
+        <select class="big-select" id="age-select">
+          <option>일반 성인</option>
+          <option selected>중장년 (40~60대)</option>
+          <option>고령 환자 (70대 이상)</option>
+          <option>젊은 성인 (20~30대)</option>
+        </select>
+
+        <div class="field-label">포함할 내용</div>
+        <div class="tag-grid" id="tag-grid">
+          <button class="big-tag active" data-val="질환 설명 (원인·증상)">질환 설명</button>
+          <button class="big-tag active" data-val="치료 방법 안내">치료 방법</button>
+          <button class="big-tag active" data-val="주사 후 주의사항">주사 후 주의사항</button>
+          <button class="big-tag" data-val="일상생활 주의사항 및 자세 교정">생활 주의사항</button>
+          <button class="big-tag" data-val="운동 및 재활 안내">운동·재활</button>
+          <button class="big-tag" data-val="언제 다시 병원에 와야 하는지">재방문 기준</button>
+          <button class="big-tag" data-val="예후 및 회복 기간">예후·회복기간</button>
+          <button class="big-tag" data-val="FAQ (자주 묻는 질문)">FAQ</button>
+        </div>
+
+        <div class="field-label">설명 톤</div>
+        <div class="tone-grid" id="tone-grid">
+          <button class="tone-btn active" data-val="쉽고 친절하게 (전문용어 최소화)">😊 쉽고 친절하게</button>
+          <button class="tone-btn" data-val="표준적인 의료 설명체로">📄 표준 의료체</button>
+          <button class="tone-btn" data-val="핵심만 간결하게 (불릿포인트 위주)">⚡ 간결하게</button>
+        </div>
+
+        <div class="field-label">추가 요청사항</div>
+        <input class="big-input" id="extra-input" placeholder="예: 주사 처음 맞는 분, 고혈압 환자...">
+
+        <button class="generate-big-btn" id="main-gen-btn" onclick="runGenerate()" disabled>
+          ✨ 설명자료 생성하기
+        </button>
+      </div>
+    </div>
+
+    <!-- 출력 화면 -->
+    <div id="output-view" style="display:none;" class="fade-in">
+      <div class="output-card">
+        <div class="output-header">
+          <div class="output-clinic">
+            <span class="badge">아현재활의학과의원</span>
+            <span style="font-size:13px; color:var(--text-sub);" id="output-label"></span>
+          </div>
+          <div class="output-actions">
+            <button class="action-btn" onclick="showGenerator()">← 다시 만들기</button>
+            <button class="action-btn" onclick="copyOutput()">📋 복사</button>
+            <button class="action-btn primary" onclick="window.print()">🖨️ 인쇄</button>
+          </div>
+        </div>
+        <div class="output-body" id="output-body">
+          <div class="loading-box">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">AI가 설명자료를 작성하고 있습니다...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // 시계
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('clock').textContent =
+      now.toLocaleTimeString('ko-KR', {hour:'2-digit', minute:'2-digit'});
+    document.getElementById('date-display').textContent =
+      now.toLocaleDateString('ko-KR', {month:'long', day:'numeric', weekday:'short'});
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // 태그 토글
+  document.querySelectorAll('.big-tag').forEach(btn => {
+    btn.addEventListener('click', () => btn.classList.toggle('active'));
+  });
+  document.querySelectorAll('.tone-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  function updateBtn() {
+    const diag = document.getElementById('diag-select').value ||
+                 document.getElementById('diag-custom').value.trim();
+    document.getElementById('main-gen-btn').disabled = !diag;
+    document.getElementById('sidebar-gen-btn').disabled = !diag;
+  }
+
+  function showHome() {
+    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.menu-btn')[0].classList.add('active');
+    document.getElementById('home-view').style.display = 'block';
+    document.getElementById('generator-view').style.display = 'none';
+    document.getElementById('output-view').style.display = 'none';
+  }
+
+  function showGenerator() {
+    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.menu-btn')[1].classList.add('active');
+    document.getElementById('home-view').style.display = 'none';
+    document.getElementById('generator-view').style.display = 'block';
+    document.getElementById('output-view').style.display = 'none';
+  }
+
+  function quickGenerate(diag) {
+    document.getElementById('diag-select').value = diag;
+    document.getElementById('diag-custom').value = '';
+    // 기본 태그 설정
+    document.querySelectorAll('.big-tag').forEach(b => b.classList.remove('active'));
+    ['질환 설명 (원인·증상)', '치료 방법 안내', '주사 후 주의사항', '일상생활 주의사항 및 자세 교정'].forEach(val => {
+      document.querySelectorAll('.big-tag').forEach(b => {
+        if (b.dataset.val === val) b.classList.add('active');
+      });
+    });
+    updateBtn();
+    runGenerate();
+  }
+
+  async function runGenerate() {
+    const diag = document.getElementById('diag-custom')?.value.trim() ||
+                 document.getElementById('diag-select')?.value;
+    if (!diag) { alert('진단명을 선택해주세요.'); return; }
+
+    const age = document.getElementById('age-select')?.value || '일반 성인';
+    const tone = document.querySelector('.tone-btn.active')?.dataset.val || '쉽고 친절하게';
+    const extra = document.getElementById('extra-input')?.value.trim() || '';
+    const tags = [...document.querySelectorAll('.big-tag.active')].map(b => b.dataset.val);
+
+    // 출력 화면으로 전환
+    document.getElementById('home-view').style.display = 'none';
+    document.getElementById('generator-view').style.display = 'none';
+    document.getElementById('output-view').style.display = 'block';
+    document.getElementById('output-label').textContent = diag;
+    document.getElementById('output-body').innerHTML = `
+      <div class="loading-box">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">AI가 설명자료를 작성하고 있습니다...</div>
+      </div>`;
+
+    const prompt = `당신은 아현재활의학과의원의 환자 설명자료를 작성하는 의료 전문 AI입니다.
+
+조건:
+- 진단명/시술명: ${diag}
+- 환자 연령대: ${age}
+- 설명 톤: ${tone}
+- 포함 내용: ${tags.join(', ')}
+${extra ? `- 추가 조건: ${extra}` : ''}
+
+[필수 용어 규칙]
+- "스테로이드", "트리암시놀론", "덱사메타손", "코르티코스테로이드" → 반드시 "소염제" 또는 "소염 주사약"으로만 표현
+- 스테로이드 주사 → "소염 주사"로 표현
+- 어렵거나 거부감을 주는 의학 용어는 환자 친화적으로 대체
+
+작성 규칙:
+1. 각 섹션은 이모지 + 제목으로 구분
+2. 구체적이고 실용적으로 (수치 포함)
+3. A4 1페이지 분량
+4. 마지막 줄: "아현재활의학과의원에서 항상 최선을 다하겠습니다 😊"`;
+
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+      const data = await res.json();
+      const text = data.content?.map(c => c.text || '').join('') || '오류가 발생했습니다.';
+      document.getElementById('output-body').textContent = text;
+      window._outputText = text;
+    } catch(e) {
+      document.getElementById('output-body').innerHTML = '<div class="empty-box"><div class="empty-icon">⚠️</div><div class="empty-text">오류가 발생했습니다. 다시 시도해주세요.</div></div>';
+    }
+  }
+
+  function copyOutput() {
+    if (!window._outputText) return;
+    navigator.clipboard.writeText(window._outputText).then(() => {
+      const btn = event.target;
+      btn.textContent = '✅ 복사됨';
+      setTimeout(() => btn.textContent = '📋 복사', 2000);
+    });
+  }
+</script>
+</body>
+</html>
