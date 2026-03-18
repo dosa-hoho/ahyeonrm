@@ -2,11 +2,13 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="description" content="아현재활의학과의원 환자 설명자료 안내 시스템">
+<meta property="og:title" content="아현재활의학과의원 — 환자 설명자료">
+<meta property="og:description" content="질환별 안내자료를 스마트폰에서 바로 확인하세요">
+<meta property="og:type" content="website">
 <title>아현재활의학과의원 — 환자 설명자료</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
-
   :root {
     --primary: #1B4F8A;
     --primary-light: #EBF2FA;
@@ -26,562 +28,695 @@
     --radius: 16px;
     --radius-sm: 10px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-  body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overscroll-behavior: none;
-  }
-
-  /* ── 헤더 ── */
+  /* 헤더 */
   .clinic-header {
-    background: var(--primary);
-    padding: 20px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 16px rgba(27,79,138,0.18);
+    background: var(--primary); padding: 16px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 16px rgba(27,79,138,0.2);
   }
-  .clinic-logo { display: flex; align-items: center; gap: 14px; }
-  .clinic-logo-icon {
-    width: 48px; height: 48px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 24px;
-  }
-  .clinic-name { color: #fff; }
-  .clinic-name .main { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
-  .clinic-name .sub { font-size: 12px; font-weight: 300; opacity: 0.75; margin-top: 2px; }
-  .clinic-time { color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 300; text-align: right; }
-  .clinic-time .time { font-size: 22px; font-weight: 500; color: #fff; }
+  .clinic-logo { display: flex; align-items: center; gap: 12px; }
+  .clinic-logo-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+  .clinic-name .main { font-size: 18px; font-weight: 700; color: #fff; }
+  .clinic-name .sub { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 1px; }
+  .clock { color: #fff; text-align: right; }
+  .clock .time { font-size: 20px; font-weight: 500; }
+  .clock .date { font-size: 11px; opacity: 0.7; margin-top: 2px; }
 
-  /* ── 메인 레이아웃 ── */
-  .main { display: grid; grid-template-columns: 280px 1fr; min-height: calc(100vh - 88px); }
-
-  /* ── 사이드바 ── */
-  .sidebar {
-    background: var(--card);
-    border-right: 1px solid var(--border);
-    padding: 24px 16px;
-    overflow-y: auto;
-  }
-  .sidebar-section { margin-bottom: 24px; }
-  .sidebar-label {
-    font-size: 11px; font-weight: 600; color: var(--text-hint);
-    text-transform: uppercase; letter-spacing: 0.08em;
-    padding: 0 8px; margin-bottom: 8px;
-  }
-  .menu-btn {
-    width: 100%; display: flex; align-items: center; gap: 12px;
-    padding: 14px 16px; border-radius: var(--radius-sm);
-    border: none; background: transparent;
-    color: var(--text-sub); font-size: 14px; font-weight: 500;
-    cursor: pointer; transition: all 0.18s; text-align: left;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-  .menu-btn:hover { background: var(--primary-light); color: var(--primary); }
-  .menu-btn.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
-  .menu-btn .icon { font-size: 18px; width: 28px; text-align: center; flex-shrink: 0; }
-  .menu-btn .arrow { margin-left: auto; font-size: 12px; opacity: 0.4; }
-
-  .generate-big-btn {
-    width: 100%; padding: 16px;
-    background: var(--primary); color: #fff;
-    border: none; border-radius: var(--radius-sm);
-    font-size: 15px; font-weight: 600;
-    cursor: pointer; transition: all 0.18s;
-    font-family: 'Noto Sans KR', sans-serif;
-    margin-top: 8px;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-  }
-  .generate-big-btn:hover { background: #153d6e; transform: translateY(-1px); }
-  .generate-big-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-  /* ── 콘텐츠 영역 ── */
-  .content { padding: 32px; overflow-y: auto; max-height: calc(100vh - 88px); }
-
-  /* ── 홈 화면 ── */
-  .home-welcome {
+  /* 홈 */
+  .home { padding: 24px 20px; }
+  .welcome-card {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%);
-    border-radius: var(--radius); padding: 36px 40px;
-    color: #fff; margin-bottom: 28px;
-    position: relative; overflow: hidden;
+    border-radius: var(--radius); padding: 28px 24px; color: #fff;
+    margin-bottom: 24px; position: relative; overflow: hidden;
   }
-  .home-welcome::after {
-    content: '🏥';
-    position: absolute; right: 32px; top: 50%; transform: translateY(-50%);
-    font-size: 80px; opacity: 0.15;
-  }
-  .home-welcome h2 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
-  .home-welcome p { font-size: 15px; opacity: 0.85; line-height: 1.6; }
+  .welcome-card::after { content: '🏥'; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 64px; opacity: 0.12; }
+  .welcome-card h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .welcome-card p { font-size: 14px; opacity: 0.85; line-height: 1.6; }
 
-  .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+  .section-label { font-size: 13px; font-weight: 600; color: var(--text-sub); margin-bottom: 12px; padding-left: 4px; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  @media (max-width: 500px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+
   .cat-card {
     background: var(--card); border-radius: var(--radius);
-    padding: 22px 18px; cursor: pointer;
-    border: 1.5px solid transparent;
+    padding: 20px 14px; cursor: pointer;
+    border: 2px solid transparent;
     transition: all 0.2s; text-align: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    -webkit-user-select: none; user-select: none;
   }
-  .cat-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(27,79,138,0.12); }
-  .cat-card .cat-icon { font-size: 32px; margin-bottom: 10px; }
-  .cat-card .cat-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-  .cat-card .cat-count { font-size: 12px; color: var(--text-hint); }
+  .cat-card:active { transform: scale(0.96); }
+  .cat-card:hover { border-color: var(--primary); box-shadow: 0 6px 20px rgba(27,79,138,0.14); }
+  .cat-icon { font-size: 30px; margin-bottom: 8px; }
+  .cat-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .cat-type { font-size: 11px; color: var(--text-hint); }
 
-  /* ── 설정 패널 ── */
-  .setup-card {
-    background: var(--card); border-radius: var(--radius);
-    padding: 28px; margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  /* 상세 화면 */
+  .detail { display: none; padding: 20px; }
+  .back-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--card); border: 1.5px solid var(--border);
+    border-radius: 30px; padding: 10px 18px;
+    font-size: 14px; font-weight: 500; color: var(--text-sub);
+    cursor: pointer; margin-bottom: 20px;
+    width: fit-content; transition: all 0.15s;
+    font-family: inherit;
   }
-  .setup-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
-  .field-label { font-size: 13px; font-weight: 500; color: var(--text-sub); margin-bottom: 8px; }
-  .big-select {
-    width: 100%; padding: 14px 16px;
-    border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-    background: var(--bg); color: var(--text);
-    font-size: 15px; font-family: 'Noto Sans KR', sans-serif;
-    outline: none; cursor: pointer; margin-bottom: 18px;
+  .back-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+  .doc-card { background: var(--card); border-radius: var(--radius); padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 16px; }
+  .doc-header { text-align: center; padding-bottom: 18px; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
+  .doc-badge { display: inline-block; background: var(--primary); color: #fff; font-size: 11px; padding: 4px 14px; border-radius: 20px; margin-bottom: 10px; }
+  .doc-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .doc-sub { font-size: 13px; color: var(--text-sub); }
+
+  .doc-section { margin-bottom: 20px; }
+  .sec-title { font-size: 15px; font-weight: 600; padding: 9px 14px; border-radius: 8px; margin-bottom: 10px; }
+  .sec-body { border-radius: 8px; padding: 14px 16px; }
+  .item { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
+  .item:last-child { margin-bottom: 0; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
+  .item-text { font-size: 14px; line-height: 1.75; color: var(--text); }
+  .item-text strong { font-weight: 600; }
+  .item-sub { font-size: 12px; color: var(--text-sub); margin-top: 3px; display: block; line-height: 1.6; }
+
+  /* 섹션 컬러 */
+  .blue .sec-title { background: #EBF2FA; color: #0C447C; }
+  .blue .sec-body { background: #EBF2FA; }
+  .blue .dot { background: #378ADD; }
+  .green .sec-title { background: #E8F7F1; color: #085041; }
+  .green .sec-body { background: #E8F7F1; }
+  .green .dot { background: #1D9E75; }
+  .amber .sec-title { background: #FEF6E4; color: #633806; }
+  .amber .sec-body { background: #FEF6E4; }
+  .amber .dot { background: #BA7517; }
+  .red .sec-title { background: #FDECEB; color: #791F1F; }
+  .red .sec-body { background: #FDECEB; }
+  .red .dot { background: #E24B4A; }
+  .purple .sec-title { background: #EEEDFE; color: #3C3489; }
+  .purple .sec-body { background: #EEEDFE; }
+  .purple .dot { background: #7F77DD; }
+
+  .doc-footer { text-align: center; padding-top: 16px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sub); line-height: 1.8; }
+
+  .print-btn {
+    width: 100%; padding: 14px; background: var(--primary); color: #fff;
+    border: none; border-radius: var(--radius-sm);
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-bottom: 32px;
   }
-  .big-select:focus { border-color: var(--primary); }
-  .big-input {
-    width: 100%; padding: 14px 16px;
-    border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-    background: var(--bg); color: var(--text);
-    font-size: 15px; font-family: 'Noto Sans KR', sans-serif;
-    outline: none; margin-bottom: 18px;
-  }
-  .big-input:focus { border-color: var(--primary); }
+  .print-btn:active { opacity: 0.85; }
 
-  .tag-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
-  .big-tag {
-    padding: 10px 18px; border-radius: 30px;
-    border: 1.5px solid var(--border);
-    background: var(--bg); color: var(--text-sub);
-    font-size: 14px; font-weight: 500;
-    cursor: pointer; transition: all 0.15s;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-  .big-tag:hover { border-color: var(--primary); color: var(--primary); }
-  .big-tag.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary); font-weight: 600; }
+  .fade-in { animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-  .tone-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
-  .tone-btn {
-    padding: 12px 8px; border-radius: var(--radius-sm);
-    border: 1.5px solid var(--border);
-    background: var(--bg); color: var(--text-sub);
-    font-size: 13px; font-weight: 500; text-align: center;
-    cursor: pointer; transition: all 0.15s;
-    font-family: 'Noto Sans KR', sans-serif;
-  }
-  .tone-btn.active { background: var(--primary-light); border-color: var(--primary); color: var(--primary); font-weight: 600; }
-
-  /* ── 출력 결과 ── */
-  .output-card {
-    background: var(--card); border-radius: var(--radius);
-    padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  }
-  .output-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
-  .output-clinic { display: flex; align-items: center; gap: 10px; }
-  .output-clinic .badge { background: var(--primary); color: #fff; font-size: 12px; padding: 4px 12px; border-radius: 20px; font-weight: 500; }
-  .output-actions { display: flex; gap: 10px; }
-  .action-btn {
-    padding: 10px 20px; border-radius: var(--radius-sm);
-    border: 1.5px solid var(--border);
-    background: transparent; color: var(--text-sub);
-    font-size: 13px; font-weight: 500;
-    cursor: pointer; transition: all 0.15s;
-    font-family: 'Noto Sans KR', sans-serif;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .action-btn:hover { border-color: var(--primary); color: var(--primary); }
-  .action-btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
-  .action-btn.primary:hover { background: #153d6e; }
-
-  .output-body { font-size: 15px; line-height: 1.85; color: var(--text); white-space: pre-wrap; }
-
-  /* ── 로딩 ── */
-  .loading-box { text-align: center; padding: 60px 20px; }
-  .loading-spinner { width: 48px; height: 48px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-text { font-size: 14px; color: var(--text-sub); }
-
-  .empty-box { text-align: center; padding: 80px 20px; }
-  .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
-  .empty-text { font-size: 15px; color: var(--text-hint); }
-
-  /* ── 인쇄 ── */
   @media print {
-    .clinic-header, .sidebar, .output-actions { display: none !important; }
-    .main { grid-template-columns: 1fr; }
-    .content { padding: 20px; max-height: none; }
-    .output-card { box-shadow: none; border: 1px solid #ddd; }
+    .clinic-header, .back-btn, .print-btn { display: none !important; }
+    .detail { display: block !important; padding: 0; }
+    .home { display: none !important; }
+    .doc-card { box-shadow: none; border: 1px solid #ddd; }
   }
-
-  /* ── 반응형 ── */
-  @media (max-width: 768px) {
-    .main { grid-template-columns: 1fr; }
-    .sidebar { display: none; }
-    .category-grid { grid-template-columns: repeat(2, 1fr); }
-    .tone-grid { grid-template-columns: 1fr; }
-    .content { padding: 20px; }
-  }
-
-  .fade-in { animation: fadeIn 0.3s ease; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
 
-<!-- 헤더 -->
 <header class="clinic-header">
   <div class="clinic-logo">
     <div class="clinic-logo-icon">🏥</div>
     <div class="clinic-name">
       <div class="main">아현재활의학과의원</div>
-      <div class="sub">환자 맞춤 설명자료 시스템</div>
+      <div class="sub">환자 설명자료 안내 시스템</div>
     </div>
   </div>
-  <div class="clinic-time">
+  <div class="clock">
     <div class="time" id="clock">--:--</div>
-    <div id="date-display"></div>
+    <div class="date" id="date-str"></div>
   </div>
 </header>
 
-<div class="main">
-  <!-- 사이드바 -->
-  <aside class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-label">메뉴</div>
-      <button class="menu-btn active" onclick="showHome()">
-        <span class="icon">🏠</span> 홈
-        <span class="arrow">›</span>
-      </button>
-      <button class="menu-btn" onclick="showGenerator()">
-        <span class="icon">📋</span> 설명자료 만들기
-        <span class="arrow">›</span>
-      </button>
-    </div>
+<!-- 홈 화면 -->
+<div class="home" id="home">
+  <div class="welcome-card">
+    <h2>안녕하세요 😊</h2>
+    <p>궁금하신 질환이나 시술을 선택하시면<br>자세한 설명자료를 확인하실 수 있습니다.</p>
+  </div>
 
-    <div class="sidebar-section">
-      <div class="sidebar-label">빠른 생성</div>
-      <button class="menu-btn" onclick="quickGenerate('요추 추간판 탈출증 (허리디스크)')">
-        <span class="icon">🦴</span> 허리디스크
-      </button>
-      <button class="menu-btn" onclick="quickGenerate('요추 척추관 협착증')">
-        <span class="icon">🦴</span> 척추관 협착증
-      </button>
-      <button class="menu-btn" onclick="quickGenerate('무릎 골관절염')">
-        <span class="icon">🦵</span> 무릎 골관절염
-      </button>
-      <button class="menu-btn" onclick="quickGenerate('경막외 주사 시술')">
-        <span class="icon">💉</span> 경막외 주사
-      </button>
-      <button class="menu-btn" onclick="quickGenerate('오십견 (유착성 관절낭염)')">
-        <span class="icon">💪</span> 오십견
-      </button>
-      <button class="menu-btn" onclick="quickGenerate('족저근막염')">
-        <span class="icon">🦶</span> 족저근막염
-      </button>
-    </div>
+  <div class="section-label">척추 질환</div>
+  <div class="grid">
+    <div class="cat-card" onclick="show('disc')"><div class="cat-icon">🦴</div><div class="cat-name">허리디스크</div><div class="cat-type">요추 추간판 탈출증</div></div>
+    <div class="cat-card" onclick="show('stenosis')"><div class="cat-icon">🏗️</div><div class="cat-name">척추관 협착증</div><div class="cat-type">요추 협착증</div></div>
+    <div class="cat-card" onclick="show('neck')"><div class="cat-icon">🔄</div><div class="cat-name">목디스크</div><div class="cat-type">경추 추간판 탈출증</div></div>
+  </div>
 
-    <div class="sidebar-section">
-      <button class="generate-big-btn" id="sidebar-gen-btn" onclick="runGenerate()" disabled>
-        ✨ 설명자료 생성
-      </button>
-    </div>
-  </aside>
+  <div class="section-label">관절 질환</div>
+  <div class="grid">
+    <div class="cat-card" onclick="show('knee')"><div class="cat-icon">🦵</div><div class="cat-name">무릎 관절염</div><div class="cat-type">골관절염</div></div>
+    <div class="cat-card" onclick="show('frozen')"><div class="cat-icon">💪</div><div class="cat-name">오십견</div><div class="cat-type">유착성 관절낭염</div></div>
+    <div class="cat-card" onclick="show('rotator')"><div class="cat-icon">🙆</div><div class="cat-name">회전근개 파열</div><div class="cat-type">어깨 힘줄 손상</div></div>
+    <div class="cat-card" onclick="show('plantar')"><div class="cat-icon">🦶</div><div class="cat-name">족저근막염</div><div class="cat-type">발바닥 통증</div></div>
+    <div class="cat-card" onclick="show('tennis')"><div class="cat-icon">🎾</div><div class="cat-name">테니스엘보</div><div class="cat-type">외측상과염</div></div>
+  </div>
 
-  <!-- 콘텐츠 -->
-  <main class="content" id="content-area">
-    <!-- 홈 화면 -->
-    <div id="home-view" class="fade-in">
-      <div class="home-welcome">
-        <h2>안녕하세요 😊</h2>
-        <p>아현재활의학과의원 환자 설명자료 시스템입니다.<br>아래에서 궁금한 질환을 선택하시면 쉽게 설명자료를 확인하실 수 있습니다.</p>
-      </div>
+  <div class="section-label">주사 시술 안내</div>
+  <div class="grid">
+    <div class="cat-card" onclick="show('epidural')"><div class="cat-icon">💉</div><div class="cat-name">경막외 주사</div><div class="cat-type">시술 안내</div></div>
+    <div class="cat-card" onclick="show('facet')"><div class="cat-icon">🎯</div><div class="cat-name">후관절 주사</div><div class="cat-type">시술 안내</div></div>
+    <div class="cat-card" onclick="show('knee-inj')"><div class="cat-icon">🦵</div><div class="cat-name">무릎 주사</div><div class="cat-type">관절강내 주사</div></div>
+    <div class="cat-card" onclick="show('trigger')"><div class="cat-icon">📍</div><div class="cat-name">트리거포인트</div><div class="cat-type">시술 안내</div></div>
+  </div>
+</div>
 
-      <div style="font-size:15px; font-weight:600; color:var(--text); margin-bottom:14px;">질환별 바로가기</div>
-      <div class="category-grid">
-        <div class="cat-card" onclick="quickGenerate('요추 추간판 탈출증 (허리디스크)')">
-          <div class="cat-icon">🦴</div>
-          <div class="cat-name">허리디스크</div>
-          <div class="cat-count">요추 추간판 탈출증</div>
-        </div>
-        <div class="cat-card" onclick="quickGenerate('요추 척추관 협착증')">
-          <div class="cat-icon">🏗️</div>
-          <div class="cat-name">척추관 협착증</div>
-          <div class="cat-count">요추 협착증</div>
-        </div>
-        <div class="cat-card" onclick="quickGenerate('경추 추간판 탈출증 (목디스크)')">
-          <div class="cat-icon">🔄</div>
-          <div class="cat-name">목디스크</div>
-          <div class="cat-count">경추 추간판 탈출증</div>
-        </div>
-        <div class="cat-card" onclick="quickGenerate('무릎 골관절염')">
-          <div class="cat-icon">🦵</div>
-          <div class="cat-name">무릎 관절염</div>
-          <div class="cat-count">골관절염</div>
-        </div>
-        <div class="cat-card" onclick="quickGenerate('오십견 (유착성 관절낭염)')">
-          <div class="cat-icon">💪</div>
-          <div class="cat-name">오십견</div>
-          <div class="cat-count">유착성 관절낭염</div>
-        </div>
-        <div class="cat-card" onclick="quickGenerate('족저근막염')">
-          <div class="cat-icon">🦶</div>
-          <div class="cat-name">족저근막염</div>
-          <div class="cat-count">발바닥 통증</div>
-        </div>
-        <div class="cat-card" onclick="quickGenerate('경막외 주사 시술')">
-          <div class="cat-icon">💉</div>
-          <div class="cat-name">경막외 주사</div>
-          <div class="cat-count">주사 시술 안내</div>
-        </div>
-        <div class="cat-card" onclick="quickGenerate('어깨 회전근개 파열')">
-          <div class="cat-icon">🙆</div>
-          <div class="cat-name">회전근개 파열</div>
-          <div class="cat-count">어깨 힘줄 손상</div>
-        </div>
-        <div class="cat-card" onclick="showGenerator()">
-          <div class="cat-icon">✏️</div>
-          <div class="cat-name">직접 입력</div>
-          <div class="cat-count">기타 질환</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 생성기 화면 -->
-    <div id="generator-view" style="display:none;" class="fade-in">
-      <div class="setup-card">
-        <div class="setup-title">📋 설명자료 설정</div>
-
-        <div class="field-label">진단명 / 시술명</div>
-        <select class="big-select" id="diag-select" onchange="updateBtn()">
-          <option value="">선택해주세요</option>
-          <optgroup label="척추">
-            <option>요추 추간판 탈출증 (허리디스크)</option>
-            <option>요추 척추관 협착증</option>
-            <option>경추 추간판 탈출증 (목디스크)</option>
-            <option>급성 요통</option>
-            <option>만성 요통</option>
-          </optgroup>
-          <optgroup label="관절">
-            <option>무릎 골관절염</option>
-            <option>어깨 회전근개 파열</option>
-            <option>오십견 (유착성 관절낭염)</option>
-            <option>족저근막염</option>
-            <option>테니스엘보 (외측상과염)</option>
-          </optgroup>
-          <optgroup label="주사 시술">
-            <option>경막외 주사 시술</option>
-            <option>후관절 주사 시술</option>
-            <option>무릎 관절강내 주사</option>
-            <option>PRP 주사</option>
-            <option>트리거포인트 주사</option>
-          </optgroup>
-        </select>
-
-        <div class="field-label">직접 입력 (위에 없는 경우)</div>
-        <input class="big-input" id="diag-custom" placeholder="예: 고관절 점액낭염, 손목건초염..." oninput="updateBtn()">
-
-        <div class="field-label">환자 연령대</div>
-        <select class="big-select" id="age-select">
-          <option>일반 성인</option>
-          <option selected>중장년 (40~60대)</option>
-          <option>고령 환자 (70대 이상)</option>
-          <option>젊은 성인 (20~30대)</option>
-        </select>
-
-        <div class="field-label">포함할 내용</div>
-        <div class="tag-grid" id="tag-grid">
-          <button class="big-tag active" data-val="질환 설명 (원인·증상)">질환 설명</button>
-          <button class="big-tag active" data-val="치료 방법 안내">치료 방법</button>
-          <button class="big-tag active" data-val="주사 후 주의사항">주사 후 주의사항</button>
-          <button class="big-tag" data-val="일상생활 주의사항 및 자세 교정">생활 주의사항</button>
-          <button class="big-tag" data-val="운동 및 재활 안내">운동·재활</button>
-          <button class="big-tag" data-val="언제 다시 병원에 와야 하는지">재방문 기준</button>
-          <button class="big-tag" data-val="예후 및 회복 기간">예후·회복기간</button>
-          <button class="big-tag" data-val="FAQ (자주 묻는 질문)">FAQ</button>
-        </div>
-
-        <div class="field-label">설명 톤</div>
-        <div class="tone-grid" id="tone-grid">
-          <button class="tone-btn active" data-val="쉽고 친절하게 (전문용어 최소화)">😊 쉽고 친절하게</button>
-          <button class="tone-btn" data-val="표준적인 의료 설명체로">📄 표준 의료체</button>
-          <button class="tone-btn" data-val="핵심만 간결하게 (불릿포인트 위주)">⚡ 간결하게</button>
-        </div>
-
-        <div class="field-label">추가 요청사항</div>
-        <input class="big-input" id="extra-input" placeholder="예: 주사 처음 맞는 분, 고혈압 환자...">
-
-        <button class="generate-big-btn" id="main-gen-btn" onclick="runGenerate()" disabled>
-          ✨ 설명자료 생성하기
-        </button>
-      </div>
-    </div>
-
-    <!-- 출력 화면 -->
-    <div id="output-view" style="display:none;" class="fade-in">
-      <div class="output-card">
-        <div class="output-header">
-          <div class="output-clinic">
-            <span class="badge">아현재활의학과의원</span>
-            <span style="font-size:13px; color:var(--text-sub);" id="output-label"></span>
-          </div>
-          <div class="output-actions">
-            <button class="action-btn" onclick="showGenerator()">← 다시 만들기</button>
-            <button class="action-btn" onclick="copyOutput()">📋 복사</button>
-            <button class="action-btn primary" onclick="window.print()">🖨️ 인쇄</button>
-          </div>
-        </div>
-        <div class="output-body" id="output-body">
-          <div class="loading-box">
-            <div class="loading-spinner"></div>
-            <div class="loading-text">AI가 설명자료를 작성하고 있습니다...</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
+<!-- 상세 화면들 -->
+<div class="detail" id="detail">
+  <button class="back-btn" onclick="goHome()">← 목록으로</button>
+  <div id="detail-content"></div>
+  <div style="display:flex;gap:10px;margin-bottom:16px;">
+    <button onclick="shareLink()" style="flex:1;padding:13px;border:1.5px solid rgba(27,79,138,0.12);border-radius:10px;background:#fff;color:#5A6472;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;">🔗 링크 공유</button>
+    <button onclick="copyLink()" style="flex:1;padding:13px;border:1.5px solid rgba(27,79,138,0.12);border-radius:10px;background:#fff;color:#5A6472;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;">📋 링크 복사</button>
+  </div>
+  <button class="print-btn" onclick="window.print()">🖨️ 인쇄하기</button>
 </div>
 
 <script>
-  // 시계
-  function updateClock() {
-    const now = new Date();
-    document.getElementById('clock').textContent =
-      now.toLocaleTimeString('ko-KR', {hour:'2-digit', minute:'2-digit'});
-    document.getElementById('date-display').textContent =
-      now.toLocaleDateString('ko-KR', {month:'long', day:'numeric', weekday:'short'});
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
+// URL 파라미터로 직접 접근
+window.addEventListener("DOMContentLoaded", function() {
+  const p = new URLSearchParams(window.location.search).get("q");
+  if (p && contents[p]) show(p);
+});
 
-  // 태그 토글
-  document.querySelectorAll('.big-tag').forEach(btn => {
-    btn.addEventListener('click', () => btn.classList.toggle('active'));
-  });
-  document.querySelectorAll('.tone-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    });
-  });
+window.addEventListener("popstate", function(e) {
+  if (e.state && e.state.page) show(e.state.page);
+  else goHome();
+});
 
-  function updateBtn() {
-    const diag = document.getElementById('diag-select').value ||
-                 document.getElementById('diag-custom').value.trim();
-    document.getElementById('main-gen-btn').disabled = !diag;
-    document.getElementById('sidebar-gen-btn').disabled = !diag;
-  }
+function shareLink() {
+  if (navigator.share) {
+    navigator.share({ title: "아현재활의학과의원 환자 설명자료", url: window.location.href }).catch(()=>{});
+  } else { copyLink(); }
+}
 
-  function showHome() {
-    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.menu-btn')[0].classList.add('active');
-    document.getElementById('home-view').style.display = 'block';
-    document.getElementById('generator-view').style.display = 'none';
-    document.getElementById('output-view').style.display = 'none';
-  }
+function copyLink() {
+  navigator.clipboard.writeText(window.location.href)
+    .then(() => showToast("✅ 링크가 복사되었습니다"))
+    .catch(() => showToast("주소창의 링크를 복사해 주세요"));
+}
 
-  function showGenerator() {
-    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.menu-btn')[1].classList.add('active');
-    document.getElementById('home-view').style.display = 'none';
-    document.getElementById('generator-view').style.display = 'block';
-    document.getElementById('output-view').style.display = 'none';
-  }
+function showToast(msg) {
+  let t = document.getElementById("toast");
+  if (!t) { t = document.createElement("div"); t.id = "toast"; t.style.cssText = "position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1A1A2E;color:#fff;padding:10px 20px;border-radius:30px;font-size:13px;font-weight:500;z-index:999;transition:opacity .3s;white-space:nowrap;"; document.body.appendChild(t); }
+  t.textContent = msg; t.style.opacity = "1";
+  setTimeout(() => t.style.opacity = "0", 2200);
+}
 
-  function quickGenerate(diag) {
-    document.getElementById('diag-select').value = diag;
-    document.getElementById('diag-custom').value = '';
-    // 기본 태그 설정
-    document.querySelectorAll('.big-tag').forEach(b => b.classList.remove('active'));
-    ['질환 설명 (원인·증상)', '치료 방법 안내', '주사 후 주의사항', '일상생활 주의사항 및 자세 교정'].forEach(val => {
-      document.querySelectorAll('.big-tag').forEach(b => {
-        if (b.dataset.val === val) b.classList.add('active');
-      });
-    });
-    updateBtn();
-    runGenerate();
-  }
+// 시계
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('date-str').textContent = now.toLocaleDateString('ko-KR',{month:'long',day:'numeric',weekday:'short'});
+}
+updateClock(); setInterval(updateClock, 1000);
 
-  async function runGenerate() {
-    const diag = document.getElementById('diag-custom')?.value.trim() ||
-                 document.getElementById('diag-select')?.value;
-    if (!diag) { alert('진단명을 선택해주세요.'); return; }
+function goHome() {
+  document.getElementById('home').style.display = 'block';
+  document.getElementById('detail').style.display = 'none';
+  window.scrollTo(0,0);
+}
 
-    const age = document.getElementById('age-select')?.value || '일반 성인';
-    const tone = document.querySelector('.tone-btn.active')?.dataset.val || '쉽고 친절하게';
-    const extra = document.getElementById('extra-input')?.value.trim() || '';
-    const tags = [...document.querySelectorAll('.big-tag.active')].map(b => b.dataset.val);
+function show(id) {
+  const content = contents[id];
+  if (!content) return;
+  document.getElementById('detail-content').innerHTML = content;
+  document.getElementById('home').style.display = 'none';
+  history.pushState({page: id}, ', '?q=' + id);
+  document.getElementById('detail').style.display = 'block';
+  document.getElementById('detail').classList.add('fade-in');
+  window.scrollTo(0,0);
+}
 
-    // 출력 화면으로 전환
-    document.getElementById('home-view').style.display = 'none';
-    document.getElementById('generator-view').style.display = 'none';
-    document.getElementById('output-view').style.display = 'block';
-    document.getElementById('output-label').textContent = diag;
-    document.getElementById('output-body').innerHTML = `
-      <div class="loading-box">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">AI가 설명자료를 작성하고 있습니다...</div>
-      </div>`;
+const contents = {
 
-    const prompt = `당신은 아현재활의학과의원의 환자 설명자료를 작성하는 의료 전문 AI입니다.
+// ── 허리디스크 ──
+disc: `<div class="doc-card">
+  <div class="doc-header">
+    <div class="doc-badge">아현재활의학과의원</div>
+    <div class="doc-title">요추 추간판 탈출증</div>
+    <div class="doc-sub">허리디스크 안내문</div>
+  </div>
+  <div class="doc-section blue">
+    <div class="sec-title">🦴 허리디스크란?</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>척추 뼈 사이의 쿠션(디스크)이 밀려나온 상태</strong>입니다.<span class="item-sub">디스크 안쪽의 젤리 같은 물질이 바깥으로 튀어나와 주변 신경을 눌러 통증이 생깁니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>주요 증상</strong>: 허리 통증, 엉덩이·다리로 뻗치는 통증(방사통), 다리 저림·당김<span class="item-sub">특히 앉거나 허리를 숙일 때 통증이 심해지는 경우가 많습니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>원인</strong>: 노화, 잘못된 자세, 무거운 물건 반복적으로 들기, 갑작스러운 충격</div></div>
+    </div>
+  </div>
+  <div class="doc-section green">
+    <div class="sec-title">💊 치료 방법</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>소염 주사 치료</strong>: 눌린 신경 주변에 강력 소염제를 주입해 염증을 빠르게 가라앉힙니다.<span class="item-sub">1주일 간격으로 3~4회 맞으시면 효과가 좋습니다. 보통 2~3일 내 효과가 느껴지기 시작합니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>약물 치료</strong>: 소염진통제, 근육이완제 등으로 통증과 근육 긴장을 조절합니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>물리치료</strong>: 온열·전기 치료로 근육 이완 및 혈액순환 개선에 도움이 됩니다.</div></div>
+    </div>
+  </div>
+  <div class="doc-section amber">
+    <div class="sec-title">🏠 생활 주의사항</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>허리를 구부리는 자세를 줄여주세요.</strong><span class="item-sub">물건을 집을 때는 허리 대신 무릎을 구부려 앉아서 하세요.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>30~40분마다 일어나서 걸어주세요.</strong><span class="item-sub">오래 앉아있으면 디스크에 압력이 집중됩니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>5kg 이상 무거운 물건 들기는 삼가주세요.</strong></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>주무실 때</strong>: 옆으로 누워 무릎 사이에 베개를 끼우면 편합니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>걷기 운동</strong>은 하루 15~20분 평지에서 권장합니다.</div></div>
+    </div>
+  </div>
+  <div class="doc-section red">
+    <div class="sec-title">🚨 즉시 내원이 필요한 증상</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text">다리 힘이 갑자기 빠지거나 대소변 조절이 어려운 경우</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">통증이 갑자기 훨씬 심해진 경우</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">양쪽 다리가 동시에 저리거나 마비 느낌이 드는 경우</div></div>
+    </div>
+  </div>
+  <div class="doc-footer">아현재활의학과의원에서 항상 최선을 다하겠습니다 😊<br><span style="font-size:12px;">본 안내문은 일반적인 정보이며 개인 상태에 따라 다를 수 있습니다.</span></div>
+</div>`,
 
-조건:
-- 진단명/시술명: ${diag}
-- 환자 연령대: ${age}
-- 설명 톤: ${tone}
-- 포함 내용: ${tags.join(', ')}
-${extra ? `- 추가 조건: ${extra}` : ''}
+// ── 척추관 협착증 ──
+stenosis: `<div class="doc-card">
+  <div class="doc-header">
+    <div class="doc-badge">아현재활의학과의원</div>
+    <div class="doc-title">요추 척추관 협착증</div>
+    <div class="doc-sub">척추 신경 통로 좁아짐 안내문</div>
+  </div>
+  <div class="doc-section blue">
+    <div class="sec-title">🏗️ 척추관 협착증이란?</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>척추 안의 신경이 지나가는 통로(척추관)가 좁아진 상태</strong>입니다.<span class="item-sub">주로 나이가 들면서 뼈와 인대가 두꺼워져 발생하며, 50대 이상에서 흔합니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>특징적 증상</strong>: 걸을수록 다리가 저리고 무거워지다가 잠깐 앉아 쉬면 나아지는 패턴<span class="item-sub">"100m도 못 걷겠다"는 분들이 많습니다. 허리를 앞으로 굽히면 오히려 편합니다.</span></div></div>
+    </div>
+  </div>
+  <div class="doc-section green">
+    <div class="sec-title">💊 치료 방법</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>소염 주사 치료</strong>: 좁아진 통로 안에 강력 소염제를 주입해 신경 부종과 염증을 줄입니다.<span class="item-sub">1주일 간격으로 3~4회 치료 시 보행 거리가 늘어나는 효과를 기대할 수 있습니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>약물 치료</strong>: 신경 부종을 줄이는 약, 혈액순환 개선제 등을 처방합니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>보조기</strong>: 허리 보호대 착용이 일상생활 통증 완화에 도움이 됩니다.</div></div>
+    </div>
+  </div>
+  <div class="doc-section amber">
+    <div class="sec-title">🏠 생활 주의사항</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>자전거 타기</strong>가 허리를 앞으로 굽히는 자세라 걷기보다 편합니다.<span class="item-sub">실내 자전거도 좋습니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>오래 서있거나 걷기</strong>는 증상을 악화시킬 수 있습니다. 중간중간 앉아서 쉬어주세요.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>장거리 보행 시</strong> 쇼핑카트나 유모차를 잡고 걸으면 자연스럽게 허리가 굽혀져 편합니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>체중 감량</strong>이 척추 부담을 크게 줄여줍니다.</div></div>
+    </div>
+  </div>
+  <div class="doc-section red">
+    <div class="sec-title">🚨 즉시 내원이 필요한 증상</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text">갑자기 다리에 힘이 빠지거나 대소변 장애가 생긴 경우</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">쉬어도 다리 저림이 전혀 나아지지 않는 경우</div></div>
+    </div>
+  </div>
+  <div class="doc-footer">아현재활의학과의원에서 항상 최선을 다하겠습니다 😊<br><span style="font-size:12px;">본 안내문은 일반적인 정보이며 개인 상태에 따라 다를 수 있습니다.</span></div>
+</div>`,
 
-[필수 용어 규칙]
-- "스테로이드", "트리암시놀론", "덱사메타손", "코르티코스테로이드" → 반드시 "소염제" 또는 "소염 주사약"으로만 표현
-- 스테로이드 주사 → "소염 주사"로 표현
-- 어렵거나 거부감을 주는 의학 용어는 환자 친화적으로 대체
+// ── 목디스크 ──
+neck: `<div class="doc-card">
+  <div class="doc-header">
+    <div class="doc-badge">아현재활의학과의원</div>
+    <div class="doc-title">경추 추간판 탈출증</div>
+    <div class="doc-sub">목디스크 안내문</div>
+  </div>
+  <div class="doc-section blue">
+    <div class="sec-title">🔄 목디스크란?</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>목뼈 사이의 디스크가 밀려나와 신경을 누르는 상태</strong>입니다.<span class="item-sub">스마트폰·컴퓨터 사용 증가로 젊은 연령층에서도 늘고 있습니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>주요 증상</strong>: 목·어깨 통증, 팔·손가락 저림, 두통, 어지럼증<span class="item-sub">특히 고개를 뒤로 젖히거나 한쪽으로 돌릴 때 통증·저림이 심해집니다.</span></div></div>
+    </div>
+  </div>
+  <div class="doc-section green">
+    <div class="sec-title">💊 치료 방법</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>소염 주사 치료</strong>: 눌린 신경 주변에 소염제를 주입해 염증·부종을 가라앉힙니다.<span class="item-sub">1주일 간격으로 3~4회 치료가 효과적입니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>약물 치료</strong>: 소염진통제, 신경통 완화제를 처방합니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>목 견인 치료</strong>: 목뼈 사이 공간을 늘려 신경 압박을 줄여줍니다.</div></div>
+    </div>
+  </div>
+  <div class="doc-section amber">
+    <div class="sec-title">🏠 생활 주의사항</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>스마트폰·컴퓨터 사용 시</strong> 화면을 눈높이로 올려주세요.<span class="item-sub">고개를 숙이는 자세가 목디스크의 가장 큰 악화 요인입니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>베개 높이</strong>는 너무 높거나 낮지 않게, 목의 자연스러운 곡선을 유지하도록 하세요.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>30분마다 목 스트레칭</strong>을 가볍게 해주세요. 무리한 회전은 금물입니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">운전 중 장시간 같은 자세 유지를 피해주세요.</div></div>
+    </div>
+  </div>
+  <div class="doc-section red">
+    <div class="sec-title">🚨 즉시 내원이 필요한 증상</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text">팔·다리에 갑자기 힘이 빠지는 경우</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">걸음걸이가 갑자기 불안정해진 경우</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">대소변 장애가 생긴 경우</div></div>
+    </div>
+  </div>
+  <div class="doc-footer">아현재활의학과의원에서 항상 최선을 다하겠습니다 😊<br><span style="font-size:12px;">본 안내문은 일반적인 정보이며 개인 상태에 따라 다를 수 있습니다.</span></div>
+</div>`,
 
-작성 규칙:
-1. 각 섹션은 이모지 + 제목으로 구분
-2. 구체적이고 실용적으로 (수치 포함)
-3. A4 1페이지 분량
-4. 마지막 줄: "아현재활의학과의원에서 항상 최선을 다하겠습니다 😊"`;
+// ── 무릎 골관절염 ──
+knee: `<div class="doc-card">
+  <div class="doc-header">
+    <div class="doc-badge">아현재활의학과의원</div>
+    <div class="doc-title">무릎 골관절염</div>
+    <div class="doc-sub">무릎 관절 마모 안내문</div>
+  </div>
+  <div class="doc-section blue">
+    <div class="sec-title">🦵 무릎 골관절염이란?</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>무릎 관절 안의 연골이 닳아 없어지면서 뼈끼리 부딪혀 통증이 생기는 질환</strong>입니다.<span class="item-sub">나이, 체중, 과거 부상 등이 원인이며 50대 이상, 특히 여성에게 흔합니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>주요 증상</strong>: 계단 오르내릴 때 통증, 오래 걷거나 서있으면 아픔, 무릎이 붓거나 뻑뻑한 느낌<span class="item-sub">아침에 일어날 때 30분 이내 뻣뻣함이 특징적입니다.</span></div></div>
+    </div>
+  </div>
+  <div class="doc-section green">
+    <div class="sec-title">💊 치료 방법</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>관절강내 소염 주사</strong>: 관절 안에 직접 강력 소염제를 주입해 염증과 통증을 빠르게 줄입니다.<span class="item-sub">1주일 간격으로 3~4회 치료 시 효과적입니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>연골 보호 주사(하이알유론산)</strong>: 관절 안에 윤활 성분을 보충해 연골 보호와 통증 완화에 도움을 줍니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>약물 치료</strong>: 소염진통제, 연골 보호 영양제 등을 처방합니다.</div></div>
+    </div>
+  </div>
+  <div class="doc-section amber">
+    <div class="sec-title">🏠 생활 주의사항</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>체중 감량이 가장 효과적인 치료</strong>입니다.<span class="item-sub">체중 1kg 감소 시 무릎 압력 4kg 감소 효과가 있습니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>양반다리, 쪼그려 앉기는 금물</strong>입니다. 무릎 연골에 가장 나쁜 자세입니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>수영, 자전거</strong>는 무릎에 부담 없이 근육을 키울 수 있어 적극 권장합니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>무릎 보호대</strong> 착용이 일상생활 통증 완화에 도움이 됩니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">계단보다 <strong>엘리베이터·에스컬레이터</strong>를 이용해 주세요.</div></div>
+    </div>
+  </div>
+  <div class="doc-footer">아현재활의학과의원에서 항상 최선을 다하겠습니다 😊<br><span style="font-size:12px;">본 안내문은 일반적인 정보이며 개인 상태에 따라 다를 수 있습니다.</span></div>
+</div>`,
 
-    try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          messages: [{ role: 'user', content: prompt }]
-        })
-      });
-      const data = await res.json();
-      const text = data.content?.map(c => c.text || '').join('') || '오류가 발생했습니다.';
-      document.getElementById('output-body').textContent = text;
-      window._outputText = text;
-    } catch(e) {
-      document.getElementById('output-body').innerHTML = '<div class="empty-box"><div class="empty-icon">⚠️</div><div class="empty-text">오류가 발생했습니다. 다시 시도해주세요.</div></div>';
-    }
-  }
+// ── 오십견 ──
+frozen: `<div class="doc-card">
+  <div class="doc-header">
+    <div class="doc-badge">아현재활의학과의원</div>
+    <div class="doc-title">오십견 (유착성 관절낭염)</div>
+    <div class="doc-sub">어깨 굳음 안내문</div>
+  </div>
+  <div class="doc-section blue">
+    <div class="sec-title">💪 오십견이란?</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>어깨 관절을 감싸는 막(관절낭)에 염증이 생겨 유착되면서 굳어버리는 질환</strong>입니다.<span class="item-sub">50대에 많이 발생해 '오십견'이라 불리지만 40대, 60대에도 흔합니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>주요 증상</strong>: 팔을 들거나 뒤로 돌리기 어려움, 밤에 특히 심한 통증, 옷 입고 벗기 불편<span class="item-sub">자연 회복까지 1~3년 걸릴 수 있어 적극적인 치료가 중요합니다.</span></div></div>
+    </div>
+  </div>
+  <div class="doc-section green">
+    <div class="sec-title">💊 치료 방법</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>관절강내 소염 주사</strong>: 어깨 관절 안에 강력 소염제를 주입해 염증을 빠르게 가라앉힙니다.<span class="item-sub">1주일 간격으로 3~4회 치료가 효과적이며, 통증이 줄어야 운동 치료가 가능합니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>운동 치료</strong>: 통증이 어느 정도 가라앉으면 어깨 스트레칭을 꾸준히 해야 합니다.<span class="item-sub">하루 2~3회, 10~15분씩 꾸준한 스트레칭이 회복의 핵심입니다.</span></div></div>
+    </div>
+  </div>
+  <div class="doc-section amber">
+    <div class="sec-title">🏠 생활 주의사항 및 운동</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>진자 운동</strong>: 몸을 앞으로 숙이고 팔에 힘을 빼 시계추처럼 앞뒤·좌우로 흔들기<span class="item-sub">하루 3회, 1회 10분씩 권장합니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>벽 타기 운동</strong>: 벽에 손을 짚고 손가락으로 조금씩 위로 올라가기</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>아픈 쪽으로 자는 것</strong>은 피해주세요. 통증이 악화됩니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">무리해서 팔을 올리려 하지 말고 <strong>통증 없는 범위 내에서</strong> 서서히 늘려나가세요.</div></div>
+    </div>
+  </div>
+  <div class="doc-footer">아현재활의학과의원에서 항상 최선을 다하겠습니다 😊<br><span style="font-size:12px;">본 안내문은 일반적인 정보이며 개인 상태에 따라 다를 수 있습니다.</span></div>
+</div>`,
 
-  function copyOutput() {
-    if (!window._outputText) return;
-    navigator.clipboard.writeText(window._outputText).then(() => {
-      const btn = event.target;
-      btn.textContent = '✅ 복사됨';
-      setTimeout(() => btn.textContent = '📋 복사', 2000);
-    });
-  }
+// ── 회전근개 파열 ──
+rotator: `<div class="doc-card">
+  <div class="doc-header">
+    <div class="doc-badge">아현재활의학과의원</div>
+    <div class="doc-title">회전근개 파열</div>
+    <div class="doc-sub">어깨 힘줄 손상 안내문</div>
+  </div>
+  <div class="doc-section blue">
+    <div class="sec-title">🙆 회전근개 파열이란?</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>어깨를 움직이는 4개의 힘줄(회전근개) 중 하나 이상이 찢어진 상태</strong>입니다.<span class="item-sub">노화에 의한 퇴행성 변화가 가장 많고, 넘어지거나 무거운 것을 들다가 급성으로 발생하기도 합니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>주요 증상</strong>: 팔을 옆으로 들 때 통증(60~120도 구간에서 특히 심함), 야간 통증, 어깨 힘 약화<span class="item-sub">오십견과 달리 운동 범위는 어느 정도 유지되나 특정 동작에서 통증이 심합니다.</span></div></div>
+    </div>
+  </div>
+  <div class="doc-section green">
+    <div class="sec-title">💊 치료 방법</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>소염 주사 치료</strong>: 힘줄 주변 점액낭에 소염제를 주입해 염증과 통증을 줄입니다.<span class="item-sub">부분 파열의 경우 주사 치료만으로도 충분히 회복 가능합니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>체외충격파 치료</strong>: 힘줄 재생을 촉진하는 비수술 치료입니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>완전 파열</strong>의 경우 수술적 치료가 필요할 수 있습니다. 담당 선생님과 상의해 주세요.</div></div>
+    </div>
+  </div>
+  <div class="doc-section amber">
+    <div class="sec-title">🏠 생활 주의사항</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>머리 위로 팔을 올리는 동작</strong>(선반 위 물건 꺼내기, 빨래 널기 등)을 당분간 피해주세요.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>무거운 물건 들기</strong>는 힘줄에 직접 부담을 줍니다. 최대한 자제해 주세요.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">아픈 쪽 어깨를 <strong>아래로 깔고 자는 자세</strong>는 피해주세요.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">팔을 가슴 앞쪽으로 두는 <strong>삼각건 착용</strong>이 통증 완화에 도움이 됩니다.</div></div>
+    </div>
+  </div>
+  <div class="doc-footer">아현재활의학과의원에서 항상 최선을 다하겠습니다 😊<br><span style="font-size:12px;">본 안내문은 일반적인 정보이며 개인 상태에 따라 다를 수 있습니다.</span></div>
+</div>`,
+
+// ── 족저근막염 ──
+plantar: `<div class="doc-card">
+  <div class="doc-header">
+    <div class="doc-badge">아현재활의학과의원</div>
+    <div class="doc-title">족저근막염</div>
+    <div class="doc-sub">발바닥 통증 안내문</div>
+  </div>
+  <div class="doc-section blue">
+    <div class="sec-title">🦶 족저근막염이란?</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>발바닥 아치를 지지하는 두꺼운 막(족저근막)에 염증이 생긴 상태</strong>입니다.<span class="item-sub">오래 걷거나 서있는 직업, 딱딱한 바닥에서 운동, 평발 또는 높은 아치를 가진 분에게 흔합니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>특징적 증상</strong>: 아침에 첫발을 딛을 때 발뒤꿈치가 찌릿하게 아픔<span class="item-sub">조금 걷다 보면 나아지지만 오래 걷거나 저녁이 되면 다시 심해집니다.</span></div></div>
+    </div>
+  </div>
+  <div class="doc-section green">
+    <div class="sec-title">💊 치료 방법</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>소염 주사 치료</strong>: 염증이 심한 부위에 직접 소염제를 주입해 빠르게 통증을 줄입니다.<span class="item-sub">1~2회 주사로도 극적인 효과를 보는 경우가 많습니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>체외충격파</strong>: 만성 족저근막염에 효과적인 비수술 치료입니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>맞춤 깔창</strong>: 발 아치를 지지해 족저근막의 부담을 줄입니다.</div></div>
+    </div>
+  </div>
+  <div class="doc-section amber">
+    <div class="sec-title">🏠 생활 주의사항</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>아침에 일어나자마자 맨발로 딛지 마세요.</strong><span class="item-sub">침대 옆에 쿠션 있는 슬리퍼를 준비해두세요.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>딱딱한 바닥, 맨발 보행</strong>을 피해주세요. 쿠션감 있는 운동화를 신으세요.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>아침 스트레칭</strong>: 발가락을 위로 당겨 발바닥이 당기는 느낌으로 30초 유지 × 5회<span class="item-sub">발을 딛기 전 침대에서 먼저 하세요.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>얼음 마사지</strong>: 물병을 얼려 발바닥으로 굴리면 통증 완화에 효과적입니다.</div></div>
+    </div>
+  </div>
+  <div class="doc-footer">아현재활의학과의원에서 항상 최선을 다하겠습니다 😊<br><span style="font-size:12px;">본 안내문은 일반적인 정보이며 개인 상태에 따라 다를 수 있습니다.</span></div>
+</div>`,
+
+// ── 테니스엘보 ──
+tennis: `<div class="doc-card">
+  <div class="doc-header">
+    <div class="doc-badge">아현재활의학과의원</div>
+    <div class="doc-title">테니스엘보 (외측상과염)</div>
+    <div class="doc-sub">팔꿈치 바깥쪽 통증 안내문</div>
+  </div>
+  <div class="doc-section blue">
+    <div class="sec-title">🎾 테니스엘보란?</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>팔꿈치 바깥쪽 뼈(외측상과)에 붙는 힘줄에 반복적인 자극으로 염증이 생긴 상태</strong>입니다.<span class="item-sub">테니스 선수보다 컴퓨터 사용자, 주방 일, 공사 작업자 등에서 더 많이 발생합니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>특징적 증상</strong>: 팔꿈치 바깥쪽 통증, 물건 잡을 때·손목 젖힐 때 통증 심화<span class="item-sub">악수하거나 문 손잡이 돌릴 때 아프다면 전형적인 증상입니다.</span></div></div>
+    </div>
+  </div>
+  <div class="doc-section green">
+    <div class="sec-title">💊 치료 방법</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>소염 주사 치료</strong>: 아픈 힘줄 부위에 소염제를 주입해 염증을 빠르게 가라앉힙니다.<span class="item-sub">단기 효과가 매우 좋으나, 재발 방지를 위해 생활 습관 교정이 병행되어야 합니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>체외충격파</strong>: 만성 테니스엘보에 효과적이며 힘줄 재생을 촉진합니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>팔꿈치 보호대</strong>: 힘줄에 가해지는 자극을 분산시켜 통증을 줄여줍니다.</div></div>
+    </div>
+  </div>
+  <div class="doc-section amber">
+    <div class="sec-title">🏠 생활 주의사항</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>원인이 되는 반복 동작을 줄여야 합니다.</strong><span class="item-sub">컴퓨터 마우스, 빨래 짜기, 걸레질 등 손목·팔꿈치에 부담 가는 동작을 최소화하세요.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>물건을 들 때 손바닥이 위를 향하게</strong> 들면 힘줄 부담이 줄어듭니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>스트레칭</strong>: 팔을 앞으로 뻗고 손목을 아래로 꺾어 30초 유지 × 5회 (하루 3번)</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">컴퓨터 사용 시 <strong>손목 패드</strong>를 사용해 손목이 들리지 않게 하세요.</div></div>
+    </div>
+  </div>
+  <div class="doc-footer">아현재활의학과의원에서 항상 최선을 다하겠습니다 😊<br><span style="font-size:12px;">본 안내문은 일반적인 정보이며 개인 상태에 따라 다를 수 있습니다.</span></div>
+</div>`,
+
+// ── 경막외 주사 ──
+epidural: `<div class="doc-card">
+  <div class="doc-header">
+    <div class="doc-badge">아현재활의학과의원</div>
+    <div class="doc-title">경막외 주사 시술</div>
+    <div class="doc-sub">시술 전·후 안내문</div>
+  </div>
+  <div class="doc-section blue">
+    <div class="sec-title">💉 경막외 주사란?</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>척추 신경 주변 공간(경막외강)에 강력 소염제를 직접 주입하는 시술</strong>입니다.<span class="item-sub">신경 주변 염증을 직접 가라앉혀 허리·다리 통증을 효과적으로 줄여줍니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>적응증</strong>: 허리디스크, 척추관 협착증, 신경통 등으로 인한 허리·다리 방사통</div></div>
+    </div>
+  </div>
+  <div class="doc-section purple">
+    <div class="sec-title">📋 시술 전 주의사항</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>아스피린, 혈액희석제(와파린 등)</strong>를 드시는 분은 반드시 미리 말씀해 주세요.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">시술 전 <strong>식사는 가능</strong>합니다. 공복일 필요가 없습니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">가능하면 <strong>대중교통 또는 보호자 동행</strong>을 권장합니다.</div></div>
+    </div>
+  </div>
+  <div class="doc-section green">
+    <div class="sec-title">⏱ 치료 일정</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>1주일 간격으로 3~4회 치료</strong>가 가장 효과적입니다.<span class="item-sub">한 번만 맞는 것보다 꾸준히 치료할 때 훨씬 좋은 결과를 기대할 수 있습니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">효과는 보통 <strong>시술 후 2~3일 내</strong>에 느껴지기 시작합니다.</div></div>
+    </div>
+  </div>
+  <div class="doc-section amber">
+    <div class="sec-title">🏠 시술 후 주의사항</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>당일은 충분히 쉬어주세요.</strong> 과격한 활동을 피해주세요.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>시술 당일 목욕·사우나·수영은 피해주세요.</strong> 가벼운 샤워는 괜찮습니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>음주는 2~3일간 삼가주세요.</strong></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">시술 후 1~2일간 <strong>주사 부위가 약간 뻐근</strong>할 수 있습니다. 정상 반응입니다.</div></div>
+    </div>
+  </div>
+  <div class="doc-section red">
+    <div class="sec-title">🚨 즉시 내원이 필요한 증상</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text">주사 부위가 심하게 붓거나 열이 나는 경우</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">다리 힘이 갑자기 빠지거나 대소변 장애가 생긴 경우</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">두통·어지럼증이 심하게 지속되는 경우</div></div>
+    </div>
+  </div>
+  <div class="doc-footer">아현재활의학과의원에서 항상 최선을 다하겠습니다 😊<br><span style="font-size:12px;">본 안내문은 일반적인 정보이며 개인 상태에 따라 다를 수 있습니다.</span></div>
+</div>`,
+
+// ── 후관절 주사 ──
+facet: `<div class="doc-card">
+  <div class="doc-header">
+    <div class="doc-badge">아현재활의학과의원</div>
+    <div class="doc-title">후관절 주사 시술</div>
+    <div class="doc-sub">척추 관절 소염 주사 안내문</div>
+  </div>
+  <div class="doc-section blue">
+    <div class="sec-title">🎯 후관절 주사란?</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>척추 뒤쪽의 작은 관절(후관절)에 직접 소염제를 주입하는 시술</strong>입니다.<span class="item-sub">노화나 퇴행성 변화로 후관절에 염증이 생기면 허리 통증과 뻣뻣함이 발생하는데, 이를 직접 치료합니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>이런 통증에 효과적</strong>: 아침에 허리가 뻣뻣하다가 움직이면 나아지는 통증, 허리를 뒤로 젖힐 때 심한 통증</div></div>
+    </div>
+  </div>
+  <div class="doc-section green">
+    <div class="sec-title">⏱ 치료 일정 및 효과</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>1주일 간격으로 3~4회 치료</strong>가 권장됩니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">효과는 <strong>시술 당일~수일 내</strong>에 빠르게 느껴지는 경우가 많습니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">주사 치료 효과가 좋다면 이후 <strong>고주파 신경 차단술(RFA)</strong>로 장기적인 통증 완화를 고려할 수 있습니다.</div></div>
+    </div>
+  </div>
+  <div class="doc-section amber">
+    <div class="sec-title">🏠 시술 후 주의사항</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>당일 과격한 활동을 피해주세요.</strong></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>목욕·사우나는 당일 삼가주세요.</strong> 가벼운 샤워는 괜찮습니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">시술 후 1~2일간 <strong>약간의 뻐근함</strong>은 정상 반응입니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>음주는 2~3일간</strong> 피해주세요.</div></div>
+    </div>
+  </div>
+  <div class="doc-footer">아현재활의학과의원에서 항상 최선을 다하겠습니다 😊<br><span style="font-size:12px;">본 안내문은 일반적인 정보이며 개인 상태에 따라 다를 수 있습니다.</span></div>
+</div>`,
+
+// ── 무릎 관절강내 주사 ──
+'knee-inj': `<div class="doc-card">
+  <div class="doc-header">
+    <div class="doc-badge">아현재활의학과의원</div>
+    <div class="doc-title">무릎 관절강내 주사</div>
+    <div class="doc-sub">무릎 주사 시술 안내문</div>
+  </div>
+  <div class="doc-section blue">
+    <div class="sec-title">💉 무릎 관절강내 주사란?</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>무릎 관절 안에 직접 약물을 주입하는 시술</strong>입니다.<span class="item-sub">염증이 심할 때는 강력 소염제를, 연골 보호와 윤활이 필요할 때는 히알루론산을 주입합니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>적응증</strong>: 무릎 골관절염, 무릎 물 찬 경우, 활막염 등</div></div>
+    </div>
+  </div>
+  <div class="doc-section green">
+    <div class="sec-title">⏱ 치료 일정</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>소염 주사</strong>: 1주일 간격으로 3~4회 치료 시 효과적입니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>히알루론산 주사</strong>: 보통 1주일 간격으로 3~5회 연속 치료합니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">동일 부위 소염 주사는 <strong>최소 3개월 간격</strong>을 권장합니다.</div></div>
+    </div>
+  </div>
+  <div class="doc-section amber">
+    <div class="sec-title">🏠 시술 후 주의사항</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>당일 무리한 보행이나 운동은 피해주세요.</strong><span class="item-sub">주사 성분이 관절 안에 잘 퍼질 수 있도록 쉬어주는 것이 좋습니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>시술 당일 찜질방·수영은 삼가주세요.</strong></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">주사 후 1~2일간 무릎이 <strong>약간 더 뻐근</strong>할 수 있습니다. 정상 반응입니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>양반다리, 쪼그려 앉기</strong>는 계속 피해주세요.</div></div>
+    </div>
+  </div>
+  <div class="doc-section red">
+    <div class="sec-title">🚨 즉시 내원이 필요한 증상</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text">무릎이 갑자기 심하게 붓거나 열이 나는 경우</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">통증이 시술 전보다 훨씬 심해지고 지속되는 경우</div></div>
+    </div>
+  </div>
+  <div class="doc-footer">아현재활의학과의원에서 항상 최선을 다하겠습니다 😊<br><span style="font-size:12px;">본 안내문은 일반적인 정보이며 개인 상태에 따라 다를 수 있습니다.</span></div>
+</div>`,
+
+// ── 트리거포인트 주사 ──
+trigger: `<div class="doc-card">
+  <div class="doc-header">
+    <div class="doc-badge">아현재활의학과의원</div>
+    <div class="doc-title">트리거포인트 주사</div>
+    <div class="doc-sub">근육 통증 유발점 주사 안내문</div>
+  </div>
+  <div class="doc-section blue">
+    <div class="sec-title">📍 트리거포인트 주사란?</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>근육 안에 뭉쳐있는 통증 유발점(트리거포인트)에 직접 약물을 주입해 풀어주는 시술</strong>입니다.<span class="item-sub">누르면 딱딱하고 아프며 다른 부위까지 통증이 퍼지는 근육 결절을 치료합니다.</span></div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>효과적인 부위</strong>: 목·어깨 뭉침, 등 통증, 허리 근육 통증, 두통 유발 근육</div></div>
+    </div>
+  </div>
+  <div class="doc-section green">
+    <div class="sec-title">⏱ 치료 일정 및 효과</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>1~2주 간격으로 3~5회 치료</strong>가 권장됩니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">시술 직후 <strong>즉각적인 통증 완화</strong>를 느끼는 경우가 많습니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">치료 효과를 유지하려면 <strong>자세 교정과 스트레칭</strong>을 병행해야 합니다.</div></div>
+    </div>
+  </div>
+  <div class="doc-section amber">
+    <div class="sec-title">🏠 시술 후 주의사항</div>
+    <div class="sec-body">
+      <div class="item"><div class="dot"></div><div class="item-text">시술 후 <strong>24~48시간 내 근육이 뻐근</strong>할 수 있습니다. 정상 반응입니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>당일 격렬한 운동은 피해주세요.</strong> 가벼운 스트레칭은 오히려 도움이 됩니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text">시술 부위에 <strong>온찜질</strong>을 하면 근육 이완에 도움이 됩니다.</div></div>
+      <div class="item"><div class="dot"></div><div class="item-text"><strong>장시간 같은 자세</strong>를 피하고 자주 스트레칭해 주세요.</div></div>
+    </div>
+  </div>
+  <div class="doc-footer">아현재활의학과의원에서 항상 최선을 다하겠습니다 😊<br><span style="font-size:12px;">본 안내문은 일반적인 정보이며 개인 상태에 따라 다를 수 있습니다.</span></div>
+</div>`
+
+}; // end contents
 </script>
 </body>
 </html>
